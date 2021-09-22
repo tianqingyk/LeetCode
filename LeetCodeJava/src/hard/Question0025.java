@@ -33,22 +33,18 @@ public class Question0025 {
     }
 
     public ListNode reverseKGroup(ListNode head, int k) {
-        ListNode result = null;
+        ListNode before = null;
         ListNode tmp = head;
         for (int i = 0; i < k; i++) {
             if (tmp == null) {
-                return result;
+                return head;
             }
-
-            if (result == null) {
-                result = tmp;
-            } else {
-                result.next = tmp;
-            }
+            before = tmp;
             tmp = tmp.next;
         }
-        result = reverseListNode(result);
-        result.next = reverseKGroup(tmp, k);
+        before.next = null;
+        ListNode result = reverseListNode(head);
+        head.next = reverseKGroup(tmp, k);
         return result;
     }
 
@@ -72,10 +68,12 @@ public class Question0025 {
         ListNode node = new ListNode(1);
         ListNode node2 = new ListNode(2);
         ListNode node3 = new ListNode(3);
+        ListNode node4 = new ListNode(4);
         node.next = node2;
         node2.next = node3;
+        node3.next = node4;
 
-        node = q.reverseKGroup(node, 2);
+        node = q.reverseKGroup(node, 3);
         System.out.println(node.val);
     }
 

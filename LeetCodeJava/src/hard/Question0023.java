@@ -12,7 +12,7 @@ import java.awt.*;
  * Merge all the linked-lists into one sorted linked-list and return it.
  */
 public class Question0023 {
-    public static ListNode mergeKLists(ListNode[] lists) {
+    public ListNode mergeKLists(ListNode[] lists) {
         if (lists == null || lists.length <= 0) {
             return null;
         }
@@ -32,6 +32,13 @@ public class Question0023 {
     }
 
     public static ListNode mergeTwoNode(ListNode leftNode, ListNode rightNode) {
+        if(leftNode == null) {
+            return rightNode;
+        }
+
+        if(rightNode == null) {
+            return leftNode;
+        }
         ListNode result = null;
         ListNode next = null;
         ListNode left = leftNode;
@@ -87,10 +94,6 @@ public class Question0023 {
         ListNode node9 = new ListNode(9);
         node7.next = node8;
         node8.next = node9;
-
-//        mergeTwoNode(node1,node4).printVals();
-        ListNode[] lists = {node1, node4, node7};
-        mergeKLists(lists).printVals();
     }
 
 

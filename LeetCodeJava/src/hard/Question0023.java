@@ -12,6 +12,34 @@ import java.awt.*;
  * Merge all the linked-lists into one sorted linked-list and return it.
  */
 public class Question0023 {
+    class ListNode {
+        int val;
+        ListNode next;
+
+        ListNode() {
+        }
+
+        ListNode(int val) {
+            this.val = val;
+        }
+
+        ListNode(int val, ListNode next) {
+            this.val = val;
+            this.next = next;
+        }
+
+        void printVals(){
+            StringBuilder sb = new StringBuilder();
+            sb.append(this.val);
+            ListNode next = this.next;
+            while (next != null){
+                sb.append(next.val);
+                next = next.next;
+            }
+            System.out.println(sb.toString());
+        }
+    }
+
     public ListNode mergeKLists(ListNode[] lists) {
         if (lists == null || lists.length <= 0) {
             return null;
@@ -31,7 +59,7 @@ public class Question0023 {
         return mergeKLists(tmp);
     }
 
-    public static ListNode mergeTwoNode(ListNode leftNode, ListNode rightNode) {
+    public ListNode mergeTwoNode(ListNode leftNode, ListNode rightNode) {
         if(leftNode == null) {
             return rightNode;
         }
@@ -77,52 +105,9 @@ public class Question0023 {
     }
 
     public static void main(String[] args){
-        ListNode node1 = new ListNode(3);
-        ListNode node2 = new ListNode(5);
-        ListNode node3 = new ListNode(7);
-        node1.next = node2;
-        node2.next = node3;
 
-        ListNode node4 = new ListNode(1);
-        ListNode node5 = new ListNode(3);
-        ListNode node6 = new ListNode(9);
-        node4.next = node5;
-        node5.next = node6;
-
-        ListNode node7 = new ListNode(1);
-        ListNode node8 = new ListNode(3);
-        ListNode node9 = new ListNode(9);
-        node7.next = node8;
-        node8.next = node9;
     }
 
 
 }
 
-class ListNode {
-    int val;
-    ListNode next;
-
-    ListNode() {
-    }
-
-    ListNode(int val) {
-        this.val = val;
-    }
-
-    ListNode(int val, ListNode next) {
-        this.val = val;
-        this.next = next;
-    }
-
-    void printVals(){
-        StringBuilder sb = new StringBuilder();
-        sb.append(this.val);
-        ListNode next = this.next;
-        while (next != null){
-            sb.append(next.val);
-            next = next.next;
-        }
-        System.out.println(sb.toString());
-    }
-}

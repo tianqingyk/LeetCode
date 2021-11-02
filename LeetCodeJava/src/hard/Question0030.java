@@ -6,10 +6,12 @@ package hard;
  * @date 9/23/21
  */
 
-import java.time.chrono.IsoChronology;
+import com.sun.nio.sctp.SendFailedNotification;
+
 import java.util.*;
 
 /**
+ * QUESTION 30
  * You are given a string s and an array of strings words of the same length.
  * Return all starting indices of substring(s) in s that is a concatenation of each word in words exactly once,
  * in any order, and without any intervening characters.
@@ -24,7 +26,6 @@ public class Question0030 {
         int l = words[0].length();
         char[] chars = s.toCharArray();
 
-        //1.Find every word in the string and return index of its first letter
         Map<String, List<Integer>> wordIndices = new HashMap<>();
         for (String word : words) {
             List list = new ArrayList<Integer>();
@@ -44,7 +45,6 @@ public class Question0030 {
             }
         }
 
-        //2. Put the same mod together
         Map<Integer, Map<String, List<Integer>>> tmpMap = new HashMap<>();
         for (Map.Entry<String, List<Integer>> entry : wordIndices.entrySet()) {
             String key = entry.getKey();
@@ -57,7 +57,6 @@ public class Question0030 {
             }
         }
 
-        //3. Put the same equal difference together
         List<Integer> tmpResult = new ArrayList<>();
         for (Map.Entry<Integer, Map<String, List<Integer>>> entry : tmpMap.entrySet()) {
 
@@ -81,7 +80,6 @@ public class Question0030 {
             }
         }
 
-        //4.check the result.
         Arrays.sort(words);
         for (int index : tmpResult) {
             String[] tmpWords = new String[words.length];
@@ -102,86 +100,50 @@ public class Question0030 {
         return result;
     }
 
-    public List<Integer> findSubstring2(String s, String[] words) {
-        List<Integer> result = new ArrayList<>();
-
-        int L = s.length();
-        int l = words[0].length();
-        char[] chars = s.toCharArray();
-
-        //1.Find every word in the string and return index of its first letter
-        Set<Integer> wordIndicesSet = new HashSet<>();
+    /**
+     * Copy from Jianchao Li
+     * @param s
+     * @param words
+     * @return
+     */
+    public List<Integer> findSubstring3(String s, String[] words) {
+        List<Integer> results = new ArrayList<Integer>();
+        Map<String, Integer> counts = new HashMap<String, Integer>();
         for (String word : words) {
-            char[] wordChars = word.toCharArray();
-            for (int j = 0; j < L - l + 1; j++) {
-                boolean isOk = true;
-                for (int i = 0; i < l; i++) {
-                    if (chars[j + i] != wordChars[i]) {
-                        isOk = false;
-                        break;
-                    }
-                }
-                if (isOk) {
-                    wordIndicesSet.add(j);
-                }
-            }
+            counts.put(word, counts.getOrDefault(word, 0) + 1);
         }
 
-        List<Integer> tmpResult = new ArrayList<>();
-        List<Integer> wordIndicesList = new ArrayList<>(wordIndicesSet);
-        Collections.sort(wordIndicesList);
-        for ( int j = 0; j < wordIndicesList.size(); j++){
-            int index = wordIndicesList.get(j);
-            boolean isOk = true;
-            for (int i = 1; i < words.length;i++){
-                int tmp = index+i*l;
-                boolean isContain = false;
-                for (int k = j+i; k < wordIndicesList.size(); k++) {
-                    if (tmp == wordIndicesList.get(k)){
-                        isContain = true;
-                        break;
-                    }
-                    if (tmp < wordIndicesList.get(k)){
-                        break;
-                    }
-                }
-                if (!isContain){
-                    isOk = false;
-                    break;
-                }
+        int stringLength = s.length();
+        int wordLength = words[0].length();
+        int num = words.length;
+
+        for (int i = 0; i < stringLength - wordLength * num + 1; i++) {
+            Map<String, Integer> seen = new HashMap<String, Integer>();
+            int j = 0;
+            for (; j < num; j++) {
+              String tmp = s.substring(i+j*wordLength, i+(j+1)*wordLength );
+              if (counts.containsKey(tmp)) {
+                  seen.put(tmp, seen.getOrDefault(tmp, 0) + 1);
+                  if (seen.getOrDefault(tmp, 0) > counts.getOrDefault(tmp, 0)) { // the most important part of this method.
+                      break;
+                  }
+              }else {
+                  break;
+              }
             }
-            if (isOk){
-                tmpResult.add(index);
+            if (j == num) {
+                results.add(i);
             }
+
         }
-
-        //3.check the result.
-        Arrays.sort(words);
-        for (int index : tmpResult) {
-            String[] tmpWords = new String[words.length];
-            for (int i = 0; i < words.length; i++) {
-                String str = "";
-                for (int j = 0; j < l; j++) {
-                    str += chars[index + i * l + j];
-                }
-                tmpWords[i] = str;
-            }
-            Arrays.sort(tmpWords);
-
-            if (Arrays.equals(words, tmpWords)) {
-                result.add(index);
-            }
-        }
-
-        return result;
+        return results;
     }
-
 
     public static void main(String[] args) {
-        String s = "barfoofoobarthefoobarman";
-        String[] words = {"bar","foo","the"};
+        String s = "ababaab";
+        String[] words = {"ab", "ba", "ba"};
         Question0030 q = new Question0030();
         System.out.println(q.findSubstring(s, words));
-        System.out.println(q.findSubstring2(s, words));
+        System.out.println(q.findSubstring3(s, words));
     }
 }

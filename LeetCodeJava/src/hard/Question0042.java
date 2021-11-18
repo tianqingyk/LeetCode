@@ -6,11 +6,11 @@ package hard;
  * @date 11/11/21
  */
 
-/**
- * QUESTION 42 Trapping Rain Water
- * Given n non-negative integers representing an elevation map where the width of each bar is 1, compute how much water it can trap after raining.
- */
 public class Question0042 {
+    /**
+     * QUESTION 42 Trapping Rain Water
+     * Given n non-negative integers representing an elevation map where the width of each bar is 1, compute how much water it can trap after raining.
+     */
     public int trap(int[] height) {
         int l = height.length;
         int[] result = new int[l];

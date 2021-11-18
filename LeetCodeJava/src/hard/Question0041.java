@@ -6,13 +6,13 @@ package hard;
  * @date 11/4/21
  */
 
-/**
- * QUESTION 41
- * Given an unsorted integer array nums, return the smallest missing positive integer.
- * <p>
- * You must implement an algorithm that runs in O(n) time and uses constant extra space.
- */
 public class Question0041 {
+    /**
+     * QUESTION 41
+     * Given an unsorted integer array nums, return the smallest missing positive integer.
+     * <p>
+     * You must implement an algorithm that runs in O(n) time and uses constant extra space.
+     */
 
     public int firstMissingPositive(int[] nums) {
         int l = nums.length;

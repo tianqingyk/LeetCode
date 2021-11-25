@@ -1,7 +1,9 @@
 package hard;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author yangke
@@ -24,24 +26,48 @@ public class Question0051 {
 
         List<List<Integer>> nPermutation = getNPermutation(n);
         for (List<Integer> list : nPermutation) {
-            boolean[][] matrix = new boolean[n][n];
+//            boolean[][] matrix = new boolean[n][n];
+//
+//            boolean isOk = true;
+//            for (int i = 0; i < n; i++){
+//                if (!putQueen(i, list.get(i), matrix, n)){
+//                    isOk = false;
+//                    break;
+//                }
+//            }
+//            if (isOk){
+//                result.add(list);
+//            }
 
+            // another more effective way
             boolean isOk = true;
-            for (int i = 0; i < n; i++){
-                if (!putQueen(i, list.get(i), matrix, n)){
-                    isOk = false;
+            for (int i = 1; i < n; i ++){
+                for (int j = 0; j < i; j++){
+                    int iValue = list.get(i);
+                    int jValue = list.get(j);
+                    if (i+iValue == j+jValue || i+jValue == j+iValue){
+                        isOk = false;
+                        break;
+                    }
+                }
+                if (!isOk){
                     break;
                 }
             }
             if (isOk){
-                result.add(list);
+             result.add(list);
             }
+        }
+
+        Map<Integer, String> intToStr = new HashMap<>();
+        for (int i = 0; i < n; i++){
+            intToStr.put(i, produceStr(i, n));
         }
 
         for (List<Integer> list : result){
             List<String> tmp = new ArrayList<>();
             for (Integer i : list){
-                tmp.add(produceStr(i, n));
+                tmp.add(intToStr.get(i));
             }
             resultStr.add(tmp);
         }
@@ -107,6 +133,6 @@ public class Question0051 {
 
     public static void main(String[] args) {
         Question0051 q = new Question0051();
-        System.out.println(q.solveNQueens(3));
+        System.out.println(q.solveNQueens(4));
     }
 }

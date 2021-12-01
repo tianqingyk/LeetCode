@@ -26,20 +26,6 @@ public class Question0051 {
 
         List<List<Integer>> nPermutation = getNPermutation(n);
         for (List<Integer> list : nPermutation) {
-//            boolean[][] matrix = new boolean[n][n];
-//
-//            boolean isOk = true;
-//            for (int i = 0; i < n; i++){
-//                if (!putQueen(i, list.get(i), matrix, n)){
-//                    isOk = false;
-//                    break;
-//                }
-//            }
-//            if (isOk){
-//                result.add(list);
-//            }
-
-            // another more effective way
             boolean isOk = true;
             for (int i = 1; i < n; i ++){
                 for (int j = 0; j < i; j++){
@@ -86,25 +72,11 @@ public class Question0051 {
         return sb.toString();
     }
 
-    private boolean putQueen(int i, int j, boolean[][] matrix, int n) {
-        if (matrix[i][j]){
-            return false;
-        }
-        for (int k = 0; k < n; k ++){
-            matrix[i][k] = true;
-            matrix[k][j] = true;
-            if (i+k < n){
-                if (j+k < n){
-                    matrix[i+k][j+k] = true;
-                }
-                if (j-k >= 0) {
-                    matrix[i + k][j - k] = true;
-                }
-            }
-        }
-        return true;
-    }
-
+    /**
+     * take too much time
+     * @param n
+     * @return
+     */
     private List<List<Integer>> getNPermutation(int n) {
         List<List<Integer>> result = new ArrayList<>();
         if (n <= 1) {
@@ -133,6 +105,6 @@ public class Question0051 {
 
     public static void main(String[] args) {
         Question0051 q = new Question0051();
-        System.out.println(q.solveNQueens(4));
+        System.out.println(q.solveNQueens(5));
     }
 }

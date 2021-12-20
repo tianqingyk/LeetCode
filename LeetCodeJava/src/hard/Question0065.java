@@ -111,12 +111,67 @@ public class Question0065 {
         String[] strs = { "+.8", "3.", "2", "0089", "-0.1", "+3.14", "4.", "-.9", "2e10", "-90E3", "3e+7", "+6e-1", "53.5e93", "-123.456e789"};
         String[] strs2 = {"+.", ".", "abc", "1a", "1e", "e3", "99e2.5", "--6", "-+3", "95a54e53"};
         for (String str  : strs) {
-            System.out.print(q.isNumber(str));
+            System.out.print(q.isNumber2(str)+" ");
         }
         System.out.println();
         for (String str  : strs2) {
-            System.out.print(q.isNumber(str));
+            System.out.print(q.isNumber2(str)+" ");
         }
+    }
+
+    /**
+     * solution 2
+     * Runtime: 1 ms, faster than 100.00% of Java online submissions for Valid Number.
+     * Memory Usage: 38.6 MB, less than 96.46% of Java online submissions for Valid Number.
+     * @param s
+     * @return
+     */
+    public boolean isNumber2(String s) {
+        char[] sArray = s.toCharArray();
+
+        boolean isDecimal = false;
+        boolean isENumber = false;
+        boolean canSignCharacter = true;
+        boolean hasNumber = false;
+
+        for (char c : sArray ) {
+            if ((c == '+' || c == '-')){
+               if(!canSignCharacter){
+                   return false;
+               }
+                canSignCharacter = false;
+                continue;
+            }
+
+            if (c >= '0' && c <= '9') { // is number
+                hasNumber = true;
+                canSignCharacter = false;
+                continue;
+            }
+
+            if (c == '.') { // is decimal
+                if (isDecimal || isENumber){
+                    return false;
+                }
+                isDecimal = true;
+                canSignCharacter = false;
+                continue;
+            }
+
+            if (c == 'e' || c == 'E') { // is e
+                if (isENumber || !hasNumber){
+                    return false;
+                }
+                isENumber = true;
+                canSignCharacter = true;
+                hasNumber = false;
+                continue;
+            }
+
+            return false;
+        }
+
+        return hasNumber;
     }
 
 }

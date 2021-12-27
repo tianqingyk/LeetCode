@@ -1,5 +1,9 @@
 package hard;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.Stack;
+
 /**
  * @author yangk
  * @projectName LeetCode
@@ -28,9 +32,6 @@ public class Question0084 {
         if (begin == end) {
             return 0;
         }
-        if (begin + 1 == end) {
-            return heights[begin];
-        }
         int max = heights[begin];
         int min = heights[begin];
         int minIndex = begin;
@@ -43,7 +44,7 @@ public class Question0084 {
                 minIndex = i;
             }
         }
-        int max1 = Math.max(max, min * (end - begin));
+        int max1 = min * (end - begin);
         int left = 0;
         int right = 0;
         if ((minIndex - begin) * max > max1) {
@@ -52,9 +53,36 @@ public class Question0084 {
         if ((end - minIndex - 1) * max > max1) {
             right = largestRectangleArea(heights, minIndex + 1, end);
         }
-        int max2 = Math.max(left, right);
 
-        return Math.max(max1, max2);
+        return Math.max(max1, Math.max(left, right));
+    }
+
+    /**
+     * solution 2 use stack
+     * copy from Solution
+     * @param heights
+     * @return
+     */
+    public int largestRectangleArea2(int[] heights) {
+        Stack<Integer> stack = new Stack<>();
+        stack.push(-1);
+        int length = heights.length;
+        int maxArea = 0;
+        for (int i = 0; i < length; i++) {
+            while ((stack.peek() != -1)
+                    && (heights[stack.peek()] >= heights[i])) {
+                int currentHeight = heights[stack.pop()];
+                int currentWidth = i - stack.peek() - 1;
+                maxArea = Math.max(maxArea, currentHeight * currentWidth);
+            }
+            stack.push(i);
+        }
+        while (stack.peek() != -1) {
+            int currentHeight = heights[stack.pop()];
+            int currentWidth = length - stack.peek() - 1;
+            maxArea = Math.max(maxArea, currentHeight * currentWidth);
+        }
+        return maxArea;
     }
 
     public static void main(String[] args) {

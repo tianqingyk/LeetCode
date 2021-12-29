@@ -49,7 +49,22 @@ public class Question0124 {
         if (root == null) {
             return 0;
         }
-        int withRoot = maxPathSumWithRoot(root.left) + maxPathSumWithRoot(root.right) + root.val;
+        if(root.left == null && root.right == null){
+            return root.val;
+        }
+
+        int withRoot = Math.max(0, maxPathSumWithRoot(root.left)) + Math.max(0,maxPathSumWithRoot(root.right)) + root.val;
+
+        if(root.left == null){
+            return Math.max(withRoot, maxPathSum(root.right));
+        }
+
+        if(root.right == null){
+            return Math.max(withRoot, maxPathSum(root.left));
+        }
+
+
+
         int withOutRoot = Math.max(maxPathSum(root.left), maxPathSum(root.right));
         return Math.max(withRoot, withOutRoot);
     }

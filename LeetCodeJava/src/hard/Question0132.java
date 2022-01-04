@@ -1,10 +1,5 @@
 package hard;
 
-import java.beans.beancontext.BeanContext;
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-
 /**
  * @author yangk
  * @projectName LeetCode

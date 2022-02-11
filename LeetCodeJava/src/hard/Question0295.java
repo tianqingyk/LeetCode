@@ -1,9 +1,6 @@
 package hard;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author yangk
@@ -26,37 +23,30 @@ public class Question0295 {
      * Answers within 10^-5 of the actual answer will be accepted.
      */
 
-    List<Integer> nums = new ArrayList<>();
-
-    public void addNum(int num) {
-        int i = 0;
-        List<Integer> newNums = new ArrayList<>();
-        for (; i < nums.size(); i++) {
-            int cur = nums.get(i);
-            if (num <= cur){
-                break;
-            }
-            newNums.add(cur);
-        }
-
-        newNums.add(num);
-        newNums.addAll(nums.subList(i, nums.size()));
-        this.nums = newNums;
-    }
+    /**
+     * Solution 1
+     * copy from discussion
+     * Two Heap Solution
+     */
+    private PriorityQueue<Integer> small = new PriorityQueue<>(Collections.reverseOrder());
+    private PriorityQueue<Integer> large = new PriorityQueue<>();
+    private boolean even = true;
 
     public double findMedian() {
-        int n = nums.size();
-        double left = nums.get((n-1)/2);
-        double right = nums.get(n/2);
-        return (left + right) / 2;
+        if (even)
+            return (small.peek() + large.peek()) / 2.0;
+        else
+            return small.peek();
     }
 
-    public static void main(String[] args) {
-        Question0295 q = new Question0295();
-        q.addNum(-1);
-        q.addNum(-2);
-        q.addNum(-3);
-        double param_2 = q.findMedian();
-        System.out.println(param_2);
+    public void addNum(int num) {
+        if (even) {
+            large.offer(num);
+            small.offer(large.poll());
+        } else {
+            small.offer(num);
+            large.offer(small.poll());
+        }
+        even = !even;
     }
 }

@@ -2,6 +2,7 @@ package hard;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.PriorityQueue;
 
 /**
  * @author yangk
@@ -48,12 +49,29 @@ public class Question0296 {
     }
 
     private int minTotalDistance(List<Integer> list) {
-        list.sort(Integer::compareTo);
-        int median = list.get(list.size()/2);
+        PriorityQueue<Integer> queue = new PriorityQueue<>();
+        int k = list.size()/2 + 1;
+        for (int i = 0; i < k; i++){
+            queue.add(list.get(i));
+        }
+
+        for (int i = k; i< list.size(); i++) {
+            int v = list.get(i);
+            if (queue.peek() < v){
+                queue.poll();
+                queue.add(v);
+            }
+        }
+        int median = queue.peek();
         int result = 0;
         for (int v : list) {
             result += Math.abs(v - median);
         }
         return result;
+    }
+
+    public static void main(String[] args) {
+        Question0296 q = new Question0296();
+        q.minTotalDistance(new int[][] {{1,0,0,0,1},{0,0,0,0,0},{0,0,1,0,0}});
     }
 }

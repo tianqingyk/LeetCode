@@ -92,4 +92,58 @@ public class Question0302 {
         System.out.println(reuslt);
     }
 
+    /**
+     * Solution 2 copy from solution
+     * Naive Linear Search
+     * Runtime: 3 ms, faster than 46.50% of Java online submissions for Smallest Rectangle Enclosing Black Pixels.
+     * Memory Usage: 56 MB, less than 16.05% of Java online submissions for Smallest Rectangle Enclosing Black Pixels.
+     */
+    public int minArea2(char[][] image, int x, int y) {
+        int top = x, bottom = x;
+        int left = y, right = y;
+        for (x = 0; x < image.length; x++) {
+            for (y = 0; y < image[0].length; y++) {
+                if (image[x][y] == '1') {
+                    top = Math.min(top, x);
+                    bottom = Math.max(bottom, x + 1);
+                    left = Math.min(left, y);
+                    right = Math.max(right, y + 1);
+                }
+            }
+        }
+        return (right - left) * (bottom - top);
+    }
+
+    /**
+     * Solution 3 copy from solution
+     * DFS or BEF
+     * Runtime: 3 ms, faster than 46.50% of Java online submissions for Smallest Rectangle Enclosing Black Pixels.
+     * Memory Usage: 55.5 MB, less than 20.25% of Java online submissions for Smallest Rectangle Enclosing Black Pixels.
+     */
+
+    private int top, bottom, left, right;
+    public int minArea3(char[][] image, int x, int y) {
+        if (image.length == 0 || image[0].length == 0) return 0;
+        top = bottom = x;
+        left = right = y;
+        dfs(image, x, y);
+        return (right - left) * (bottom - top);
+    }
+
+    private void dfs(char[][] image, int x, int y) {
+        if (x < 0 || y < 0 || x >= image.length || y >= image[0].length || image[x][y] == '0'){
+            return;
+        }
+
+        image[x][y] = '0'; //Mark visited black pixel as white
+        top = Math.min(top, x);
+        bottom = Math.max(bottom, x + 1);
+        left = Math.min(left, y);
+        right = Math.max(right, y + 1);
+        dfs(image, x + 1, y);
+        dfs(image, x - 1, y);
+        dfs(image, x, y - 1);
+        dfs(image, x, y + 1);
+    }
+
 }

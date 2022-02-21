@@ -36,6 +36,7 @@ public class Question0002 {
      * Solution 1
      * Runtime: 1 ms, faster than 100.00% of Java online submissions for Add Two Numbers.
      * Memory Usage: 42.3 MB, less than 76.12% of Java online submissions for Add Two Numbers.
+     *
      * @param l1
      * @param l2
      * @return
@@ -46,7 +47,7 @@ public class Question0002 {
 
     private ListNode addTwoNumbersHelper(ListNode l1, ListNode l2, int addOne) {
         if (l1 == null && l2 == null) {
-            if (addOne > 0){
+            if (addOne > 0) {
                 return new ListNode(addOne);
             }
             return null;
@@ -65,11 +66,9 @@ public class Question0002 {
         }
 
         int val = val1 + val2 + addOne;
-        addOne = 0;
-        if (val >= 10){
-            val %= 10;
-            addOne = 1;
-        }
+        addOne = val/10;
+        val %= 10;
+
 
         ListNode node = new ListNode(val);
         node.next = addTwoNumbersHelper(nodeNext1, nodeNext2, addOne);

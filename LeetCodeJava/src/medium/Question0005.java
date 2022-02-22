@@ -15,49 +15,41 @@ public class Question0005 {
 
     /**
      * Solution 1
-     * Runtime: 1520 ms, faster than 5.01% of Java online submissions for Longest Palindromic Substring.
-     * Memory Usage: 159.4 MB, less than 5.76% of Java online submissions for Longest Palindromic Substring.
+     * Dynamic Programing
+     * Runtime: 435 ms, faster than 22.79% of Java online submissions for Longest Palindromic Substring.
+     * Memory Usage: 80.8 MB, less than 23.86% of Java online submissions for Longest Palindromic Substring.
      */
     boolean[][] dp;
-    public String longestPalindrome(String s) {
-        String maxString = "";
 
+    public String longestPalindrome(String s) {
+        if (s == null || s.length() < 1) return "";
+
+        int start = 0, end = 0;
         dp = new boolean[s.length()][s.length()];
 
-        for (int i = 0; i < s.length(); i++) {
-            for (int j = i; j < s.length(); j++) {
-                if(maxString.length() >= s.length() - i){
-                    return maxString;
-                }
-
-                if (i == j) {
-                    dp[i][j] = true;
-                    if (1 > maxString.length()) {
-                        maxString = s.substring(i, j+1);
-                    }
-                }
-                char start = s.charAt(i);
-                char end = s.charAt(j);
-                if (start == end) {
-                    String str = s.substring(i, j + 1);
-                    if (j - i < 3) {
-                        dp[i][j] = true;
-                        if (str.length() > maxString.length()){
-                            maxString = str;
-                        }
-                        continue;
-                    }
-
-                    if (dp[i+1][j-1] || isPalindromic(str)){
-                        if (str.length() > maxString.length()){
-                            maxString = str;
-                        }
-                        continue;
-                    }
+        for (int i = s.length() - 2; i >= 0; i--) {
+            dp[i][i] = true;
+            if (s.charAt(i) == s.charAt(i + 1)) {
+                dp[i][i + 1] = true;
+                if (1 > end - start){
+                    start = i;
+                    end = i+1;
                 }
             }
+            for (int j = i + 2; j < s.length(); j++) {
+                if (s.charAt(i) == s.charAt(j)) {
+                    if (dp[i + 1][j - 1]) {
+                        dp[i][j] = true;
+                        if (j - i > end - start){
+                            start = i;
+                            end = j;
+                        }
+                    }
+                }
+
+            }
         }
-        return maxString;
+        return s.substring(start, end + 1);
     }
 
     private boolean isPalindromic(String str) {
@@ -67,5 +59,35 @@ public class Question0005 {
             }
         }
         return true;
+    }
+
+    /**
+     * Solution 2 Copy from Solution
+     * Expand Around Center
+     * Runtime: 32 ms, faster than 78.83% of Java online submissions for Longest Palindromic Substring.
+     * Memory Usage: 43.1 MB, less than 50.60% of Java online submissions for Longest Palindromic Substring.
+     */
+    public String longestPalindrome2(String s) {
+        if (s == null || s.length() < 1) return "";
+        int start = 0, end = 0;
+        for (int i = 0; i < s.length(); i++) {
+            int len1 = expandAroundCenter(s, i, i);
+            int len2 = expandAroundCenter(s, i, i + 1);
+            int len = Math.max(len1, len2);
+            if (len > end - start) {
+                start = i - (len - 1) / 2;
+                end = i + len / 2;
+            }
+        }
+        return s.substring(start, end + 1);
+    }
+
+    private int expandAroundCenter(String s, int left, int right) {
+        int L = left, R = right;
+        while (L >= 0 && R < s.length() && s.charAt(L) == s.charAt(R)) {
+            L--;
+            R++;
+        }
+        return R - L - 1;
     }
 }

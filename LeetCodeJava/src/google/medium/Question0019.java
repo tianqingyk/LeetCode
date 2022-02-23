@@ -48,9 +48,7 @@ public class Question0019 {
             end = end.next;
         }
 
-        ListNode remove = beforeRemove.next;
-        ListNode removeNext = remove.next;
-        beforeRemove.next = removeNext;
+        beforeRemove.next = beforeRemove.next.next;
         return head;
     }
 

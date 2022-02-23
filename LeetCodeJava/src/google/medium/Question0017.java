@@ -60,4 +60,32 @@ public class Question0017 {
         }
         return result;
     }
+
+    /**
+     * Solution 2
+     * BackTracing
+     * Runtime: 0 ms, faster than 100.00% of Java online submissions for Letter Combinations of a Phone Number.
+     * Memory Usage: 40.5 MB, less than 43.65% of Java online submissions for Letter Combinations of a Phone
+     */
+
+    List<String> result = new ArrayList<>();
+    public List<String> letterCombinations2(String digits) {
+        if (digits.length() < 1) return result;
+        letterCombinationsHelper2(digits, 0, new StringBuilder());
+        return result;
+    }
+
+    private void letterCombinationsHelper2(String digits, int index, StringBuilder sb) {
+        if (index > digits.length() - 1) {
+            result.add(sb.toString());
+            return;
+        }
+        char cur = digits.charAt(index);
+        char[] letters = digitsMap.get(cur);
+        for (char letter : letters) {
+            sb.append(letter);
+            letterCombinationsHelper2(digits, index + 1, sb);
+            sb.deleteCharAt(sb.length() - 1);
+        }
+    }
 }

@@ -22,29 +22,42 @@ public class Question0033 {
     /**
      * Solution 1
      * Runtime: 1 ms, faster than 63.09% of Java online submissions for Search in Rotated Sorted Array.
-     * Memory Usage: 42.4 MB, less than 31.49% of Java online submissions for Search in Rotated Sorted Array.
+     * Memory Usage: 41.9 MB, less than 39.54% of Java online submissions for Search in Rotated Sorted Array.
      */
     public int search(int[] nums, int target) {
-        if (nums.length < 2){
-            if(target == nums[0]) return 0;
+        int len = nums.length;
+        if (len < 2) {
+            if (target == nums[0]) return 0;
             return -1;
         }
-        int first = nums[0];
-        int end = nums[nums.length - 1];
-        if (target < first && target > end) return -1;
+        return searchHelper(nums, target, 0, len - 1);
+    }
 
-        if (target < first) {
-            for (int i = nums.length - 1; i > 0 ; i--) {
-                if (target == nums[i]) return i;
-                if (target > nums[i] || nums[i] < nums[i-1]) return -1;
+    private int searchHelper(int[] nums, int target, int start, int end) {
+        if (target < nums[start] && target > nums[end]) return -1;
+        int mid = (start + end) / 2;
+
+        if (start == end) {
+            if (target == nums[start]) return start;
+            return -1;
+        }
+        if (start == mid){
+            if (target == nums[start]) return start;
+            if (target == nums[end]) return end;
+            return -1;
+        }
+
+        if (nums[start] < nums[mid]) {
+            if (target >= nums[start] && target <= nums[mid]) {
+                return searchHelper(nums, target, start, mid);
             }
-            return -1;
+            return searchHelper(nums, target, mid + 1, end);
         }
 
-        for (int i = 0; i < nums.length; i++) {
-            if (target == nums[i]) return i;
-            if (target < nums[i] || nums[i] > nums[i+1]) return -1;
+        if (target >= nums[mid + 1] && target <= nums[end]) {
+            return searchHelper(nums, target, mid + 1, end);
         }
-        return -1;
+        return searchHelper(nums, target, start, mid);
+
     }
 }

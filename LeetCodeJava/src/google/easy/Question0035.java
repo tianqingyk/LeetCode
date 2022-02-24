@@ -1,7 +1,5 @@
 package google.easy;
 
-import java.lang.invoke.LambdaForm$Holder;
-
 /**
  * @author yangk
  * @projectName LeetCode

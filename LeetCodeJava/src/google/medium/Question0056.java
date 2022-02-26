@@ -174,7 +174,7 @@ public class Question0056 {
 
     public int[][] merge3(int[][] intervals) {
         Arrays.sort(intervals, (a, b) -> Integer.compare(a[0], b[0]));
-        LinkedList<int[]> merged = new LinkedList<>();
+        LinkedList<int[]> merged = new LinkedList<>(); // Genius!!!!
         for (int[] interval : intervals) {
             // if the list of merged intervals is empty or if the current
             // interval does not overlap with the previous, simply append it.

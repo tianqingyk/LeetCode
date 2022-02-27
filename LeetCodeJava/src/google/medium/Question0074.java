@@ -27,18 +27,46 @@ public class Question0074 {
         int right = m * n - 1;
         while (left <= right) {
             int pivot = (left + right) / 2;
-            int val = matrix[pivot/n][pivot%n];
+            int val = matrix[pivot / n][pivot % n];
             if (val == target) return true;
             if (val < target) {
                 if (left == pivot) break;
                 left = pivot;
-            }else {
+            } else {
                 if (right == pivot) break;
                 right = pivot;
             }
         }
 
-        if(matrix[right/n][right%n] == target)   return true;
+        if (matrix[right / n][right % n] == target) return true;
         return false;
     }
+
+    /**
+     * Solution 2 Copy From Solution
+     */
+    public boolean searchMatrix2(int[][] matrix, int target) {
+        int m = matrix.length;
+        if (m == 0)
+            return false;
+        int n = matrix[0].length;
+
+        // binary search
+        int left = 0, right = m * n - 1;
+        int pivotIdx, pivotElement;
+        while (left <= right) {
+            pivotIdx = (left + right) / 2;
+            pivotElement = matrix[pivotIdx / n][pivotIdx % n];
+            if (target == pivotElement)
+                return true;
+            else {
+                if (target < pivotElement)
+                    right = pivotIdx - 1;
+                else
+                    left = pivotIdx + 1;
+            }
+        }
+        return false;
+    }
+
 }

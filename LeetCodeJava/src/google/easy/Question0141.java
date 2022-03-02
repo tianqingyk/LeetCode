@@ -48,7 +48,7 @@ public class Question0141 {
         }
 
         ListNode slow = head; // slow = k
-        ListNode fast = head.next; // fast = 2*k + 1  when k = n- 1, slow = n-1 mod n equals to fast = n - 1 mod n
+        ListNode fast = head.next; // fast = 2*k + 1  when k = n- 1, slow = n-1(mod n) is equal to fast = n - 1(mod n).
         while (slow != fast) {
             if (fast == null || fast.next == null) {
                 return false;

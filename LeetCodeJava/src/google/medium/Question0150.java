@@ -1,8 +1,7 @@
 package google.medium;
 
-import java.util.HashSet;
-import java.util.Set;
-import java.util.Stack;
+import java.util.*;
+import java.util.function.BiFunction;
 
 /**
  * @author yangk
@@ -22,6 +21,7 @@ public class Question0150 {
      * Memory Usage: 45.6 MB, less than 5.15% of Java online submissions for Evaluate Reverse Polish Notation.
      */
     static Set<String> operators = new HashSet<>();
+
     static {
         operators.add("+");
         operators.add("-");
@@ -58,4 +58,58 @@ public class Question0150 {
 
         return Integer.valueOf(stack.pop());
     }
+
+    /**
+     * Solution 2 Copy From Solution
+     * Evaluate with Stack
+     */
+
+    private static final Map<String, BiFunction<Integer, Integer, Integer>> OPERATIONS = new HashMap<>();
+
+    // Ensure this only gets done once for ALL test cases.
+    static {
+        OPERATIONS.put("+", (a, b) -> a + b);
+        OPERATIONS.put("-", (a, b) -> a - b);
+        OPERATIONS.put("*", (a, b) -> a * b);
+        OPERATIONS.put("/", (a, b) -> a / b);
+    }
+
+    public int evalRPN2(String[] tokens) {
+
+        Stack<Integer> stack = new Stack<>();
+
+        for (String token : tokens) {
+
+            if (!"+-*/".contains(token)) {
+                stack.push(Integer.valueOf(token));
+                continue;
+            }
+
+            int number2 = stack.pop();
+            int number1 = stack.pop();
+
+            int result = 0;
+
+            switch (token) {
+                case "+":
+                    result = number1 + number2;
+                    break;
+                case "-":
+                    result = number1 - number2;
+                    break;
+                case "*":
+                    result = number1 * number2;
+                    break;
+                case "/":
+                    result = number1 / number2;
+                    break;
+            }
+
+            stack.push(result);
+
+        }
+
+        return stack.pop();
+    }
+
 }

@@ -43,5 +43,4 @@ public class Question0200 {
         recursive(i, j - 1);
         recursive(i, j + 1);
     }
-
 }

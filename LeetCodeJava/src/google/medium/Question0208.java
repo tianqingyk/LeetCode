@@ -7,7 +7,7 @@ import java.util.*;
  * @projectName LeetCode
  * @data 2022/3/4
  */
-public class Question208 {
+public class Question0208 {
 
     /**
      * 208.Implement Trie(Prefix Tree)

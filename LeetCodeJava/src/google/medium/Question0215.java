@@ -29,9 +29,13 @@ public class Question0215 {
             if (queue.size() < k) queue.add(nums[i]);
             else if (queue.peek() < nums[i]){
                 queue.poll();
-                queue.add(nums[i]);
+                queue.offer(nums[i]);
             }
         }
         return queue.peek();
+    }
+
+    public static void main(String[] args) {
+
     }
 }

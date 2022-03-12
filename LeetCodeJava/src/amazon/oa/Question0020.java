@@ -24,27 +24,28 @@ public class Question0020 {
     public boolean treesHeight(int x, int[] h) {
         int n = h.length;
         int min = Arrays.stream(h).min().getAsInt();
-
         for (int i = 0; i < n; i++) {
             h[i] -= min;
         }
+
         int max = Arrays.stream(h).max().getAsInt();
+        max = Math.max(max, n - 1);
 
-        int[][] dp = new int[n][max + 1];
+        int[][] dp = new int[n][2 * max + 1];
 
-        for (int i = 0; i <= max; i++)
-            dp[0][i] = Math.abs(h[0] - i);
+        for (int i = 0; i <= 2 * max; i++)
+            dp[0][i] = Math.abs(h[0] - i + max);
 
         for (int i = 1; i < n; i++) {
             int minSoFar = dp[i - 1][i - 1];
-            for (int j = i; j <= max; j++) {
-                dp[i][j] = Math.abs(h[i] - j) + minSoFar;
+            for (int j = i; j <= 2 * max; j++) {
+                dp[i][j] = Math.abs(h[i] - j + max) + minSoFar;
                 minSoFar = Math.min(minSoFar, dp[i - 1][j]);
             }
         }
 
         int result = Integer.MAX_VALUE;
-        for (int i = n - 1; i <= max; i++) {
+        for (int i = n - 1; i <= 2 * max; i++) {
             result = Math.min(result, dp[n-1][i]);
         }
         System.out.println(result);
@@ -53,7 +54,9 @@ public class Question0020 {
 
     public static void main(String[] args) {
         Question0020 q = new Question0020();
-        q.treesHeight(13, new int[]{7, 1, 4, 10 ,5, 8, 12}); // 13
-        q.treesHeight(13, new int[]{5, 4, 3, 2, 1}); // 13
+        q.treesHeight(13, new int[]{1, 2, 2, 2, 3}); // 4
+        q.treesHeight(13, new int[]{1,1,1,1,1}); // 6
+        q.treesHeight(13, new int[] {5,4,3,2,1}); //12
+        q.treesHeight(13, new int[] {7, 1, 4, 10, 5, 8, 12}); //13
     }
 }

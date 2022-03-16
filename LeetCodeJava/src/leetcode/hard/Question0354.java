@@ -1,9 +1,6 @@
 package leetcode.hard;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.function.BiFunction;
 
 /**
@@ -17,8 +14,42 @@ public class Question0354 {
      * 354. Russian Doll Envelopes
      */
 
+    /**
+     * Solution 1
+     * Time Limit Exceeded
+     */
+
+    class Node {
+        int w = -1;
+        int h = -1;
+        int depth = 0;
+        Node parent = null;
+
+        Node() {
+        }
+
+        Node(int w, int h) {
+            this.w = w;
+            this.h = h;
+        }
+
+        public boolean putIn(Node node) {
+            if (node.depth > depth) return false;
+
+            if (w < node.w && h < node.h) {
+                node.depth = depth + 1;
+                node.parent = this;
+                return true;
+            }
+
+            if (parent != null) return parent.putIn(node);
+            return false;
+        }
+    }
+
+
     int maxEnvelopes = Integer.MIN_VALUE;
-    boolean[] visited;
+
     public int maxEnvelopes(int[][] envelopes) {
         if (envelopes == null || envelopes.length == 0) return 0;
         if (envelopes.length == 1) return 1;
@@ -29,43 +60,66 @@ public class Question0354 {
         };
 
         List<int[]> envelopeList = Arrays.stream(envelopes).sorted((a, b) -> comparator.apply(a, b)).toList();
-        visited = new boolean[envelopeList.size()];
 
-        dfs(0, envelopeList, new LinkedList<>());
+        Node root = new Node();
+        Set<Node> leaves = new HashSet<>();
+        leaves.add(root);
+        for (int[] envelop : envelopeList) {
+            Node node = new Node(envelop[0], envelop[1]);
+            for (Node leave : leaves) {
+                leave.putIn(node);
+            }
+            leaves.remove(node.parent);
+            leaves.add(node);
+        }
+
+        for (Node leave : leaves) {
+            maxEnvelopes = Math.max(leave.depth, maxEnvelopes);
+        }
+
         return maxEnvelopes;
     }
 
-    public void dfs(int index, List<int[]> envelopeList, LinkedList<int[]> cache) {
-        if (index >= envelopeList.size()) {
-            maxEnvelopes = Math.max(cache.size(), maxEnvelopes);
-            return;
-        }
-        if (visited[index]) return;
-        int[] current = envelopeList.get(index);
-        if (cache.isEmpty()){
-            cache.add(current);
-            dfs(index+1, envelopeList, cache);
-            cache.removeLast();
-            dfs(index+1, envelopeList, cache);
-            visited[index] = true;
-            return;
-        }
+    /**
+     * Solution 2 Copy From Solution
+     * Sort + The Longest Increasing Subsequence
+     */
 
-        int[] previous = cache.getLast();
-        if (previous[0] < current[0] && previous[1] < current[1]) {
-            cache.add(current);
-            dfs(index + 1, envelopeList, cache);
-            cache.remove(current);
-            dfs(index + 1, envelopeList, cache);
-            visited[index] = true;
-            return;
+    public int lengthOfLIS(int[] nums) {
+        int[] dp = new int[nums.length];
+        int len = 0;
+        for (int num : nums) {
+            int i = Arrays.binarySearch(dp, 0, len, num);
+            if (i < 0) {
+                i = -(i + 1);
+            }
+            dp[i] = num;
+            if (i == len) {
+                len++;
+            }
         }
-        dfs(index + 1, envelopeList, cache);
-        visited[index] = true;
+        return len;
+    }
+
+    public int maxEnvelopes2(int[][] envelopes) {
+        // sort on increasing in first dimension and decreasing in second
+        Arrays.sort(envelopes, new Comparator<int[]>() {
+            public int compare(int[] arr1, int[] arr2) {
+                if (arr1[0] == arr2[0]) {
+                    return arr2[1] - arr1[1];
+                } else {
+                    return arr1[0] - arr2[0];
+                }
+            }
+        });
+        // extract the second dimension and run LIS
+        int[] secondDim = new int[envelopes.length];
+        for (int i = 0; i < envelopes.length; ++i) secondDim[i] = envelopes[i][1];
+        return lengthOfLIS(secondDim);
     }
 
     public static void main(String[] args) {
         Question0354 q = new Question0354();
-        q.maxEnvelopes(new int[][]{{2, 100}, {3, 200}, {4, 300}, {5, 500}, {5, 400}, {5, 250}, {6, 370}, {6, 360}, {7, 380}});
+        q.maxEnvelopes2(new int[][]{{2, 100}, {3, 200}, {4, 300}, {5, 500}, {5, 400}, {5, 250}, {6, 370}, {6, 360}, {7, 380}});
     }
 }

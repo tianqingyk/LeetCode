@@ -1,7 +1,5 @@
 package leetcode.hard;
 
-import java.awt.*;
-
 /**
  * @author yangk
  * @projectName LeetCode
@@ -45,12 +43,12 @@ public class Question0407 {
             if (rain >= m * n - 3 || min == Integer.MAX_VALUE) break;
 
             for (int i = 0; i < m; i++) {
-                dfs(i, 0);
-                dfs(i, n - 1);
+                bfs(i, 0);
+                bfs(i, n - 1);
             }
             for (int i = 0; i < n; i++) {
-                dfs(0, i);
-                dfs(m - 1, i);
+                bfs(0, i);
+                bfs(m - 1, i);
             }
             sumRain = sumRain + rain * (min - height);
             rain = 0;
@@ -60,15 +58,15 @@ public class Question0407 {
         return sumRain;
     }
 
-    private void dfs(int i, int j) {
+    private void bfs(int i, int j) {
         if (i < 0 || j < 0 || i >= m || j >= n) return;
         if (heightMap[i][j] != 0) return;
         rain--;
         heightMap[i][j] = height;
-        dfs(i - 1, j);
-        dfs(i + 1, j);
-        dfs(i, j - 1);
-        dfs(i, j + 1);
+        bfs(i - 1, j);
+        bfs(i + 1, j);
+        bfs(i, j - 1);
+        bfs(i, j + 1);
         return;
     }
 }

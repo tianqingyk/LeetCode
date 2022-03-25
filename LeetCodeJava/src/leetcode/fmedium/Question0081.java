@@ -24,8 +24,11 @@ public class Question0081 {
             int pivot = (begin + end) / 2;
             if (nums[pivot] == target || nums[begin] == target || nums[end] == target) return true;
 
-            if (nums[pivot] == nums[begin] && nums[pivot] == nums[end]) {
+            if (nums[pivot] == nums[begin]) {
                 begin++;
+                continue;
+            }
+            if(nums[pivot] == nums[end]){
                 end--;
                 continue;
             }
@@ -34,29 +37,28 @@ public class Question0081 {
 
             // case 1 pivot > target
             if (nums[pivot] > target) {
-                if (target > nums[end] && target < nums[begin]) return false;
-
-                if (nums[begin] < target) {
+                if (nums[begin] < target || nums[pivot] < nums[begin]) {
                     end = pivot - 1;
                     continue;
                 }
 
-                begin++;
-                end--;
-                continue;
-
+                if(nums[pivot] > nums[end]){
+                    begin = pivot+1;
+                    continue;
+                }
+                return false;
             }
             // case 2 pivot < target
-            if (nums[begin] > target && target > nums[end]) return false;
 
-            if (nums[end] > target) {
+            if (nums[end] > target || nums[pivot] > nums[end]) {
                 begin = pivot + 1;
                 continue;
             }
-            begin++;
-            end--;
-            continue;
-
+            if(nums[pivot] < nums[begin]){
+                end = pivot - 1;
+                continue;
+            }
+            return false;
         }
 
         return false;

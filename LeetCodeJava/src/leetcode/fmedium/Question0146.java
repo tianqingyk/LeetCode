@@ -23,28 +23,77 @@ public class Question0146 {
         private int capacity;
 
         public LRUCache(int capacity) {
+
             this.capacity = capacity;
+            first.after = last;
+            last.before = first;
         }
 
-        Queue<Integer> keyQueue = new LinkedList<>();
-        Map<Integer, Integer> map = new HashMap<>();
+        class Node {
+            int key;
+            int value;
+            Node before, after;
+
+            Node(){}
+            Node(int key){
+                this.key = key;
+            }
+        }
+
+        Map<Integer, Node> map = new HashMap<>();
+        Node first = new Node();
+        Node last = new Node();
 
         public int get(int key) {
             if (!map.containsKey(key)) return -1;
-            keyQueue.remove(key);
-            keyQueue.add(key);
-            return map.get(key);
+            Node node = map.get(key);
+            updateNode(node);
+            return node.value;
         }
 
         public void put(int key, int value) {
-            if (map.containsKey(key)) {
-                keyQueue.remove(key);
+            Node node = null;
+            if(map.containsKey(key)) {
+                node = map.get(key);
+                removeNode(node);
+            }else{
+                node = new Node(key);
+                map.put(key, node);
+                if (map.size() > capacity) {
+                    map.remove(last.before.key);
+                    removeNode(last.before);
+                }
             }
-            if (keyQueue.size() >= capacity) map.remove(keyQueue.poll());
-            keyQueue.add(key);
-            map.put(key, value);
+            node.value = value;
+            addNode(node);
+        }
+
+        public void removeNode(Node node) {
+            Node before = node.before;
+            Node after = node.after;
+
+            before.after = after;
+            after.before = before;
+        }
+
+        public void addNode(Node node) {
+            Node after = first.after;
+
+            first.after = node;
+            node.before = first;
+
+            node.after = after;
+            after.before = node;
+
+        }
+
+        public void updateNode(Node node) {
+            removeNode(node);
+            addNode(node);
         }
     }
+
+
 
     /**
      * Solution 2 Copy From Solution
